@@ -1,0 +1,10 @@
+inputs = getinput('process.in') # 파일에서 프로세스 리스트를 입력받는다
+result = highlevel(inputs) # 시뮬레이션
+for i in result:
+    print(i.output)
+
+input file을 형식에 맞게 작성한 뒤
+해당 파일의 경로를 getinput 함수를 통해 입력해준다.
+getinput 함수가 반환한 프로세스 리스트를
+highlevel 함수에 넘겨주면 해당 함수는 시뮬레이션이 완료된 프로세스들의 리스트를 반환한다.
+리스트를 순회하며 각 프로세스의 output instance를 출력해보면 각 프로세스들의 waiting time이 출력된다.

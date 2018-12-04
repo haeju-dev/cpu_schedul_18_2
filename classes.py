@@ -28,13 +28,13 @@ class process:
 
 
 class rq:
-    def __init__(self):
-        self.process = list()
-        self.ended = list()
-        self.current = None
+    name = 'Ready Queue'
+    process = list()
+    ended = list()
+    current = None
 
     def status(self):
-        if len(self.process) or not(self.current is None):
+        if len(self.process) or not (self.current is None):
             return True
         return False
 
@@ -50,25 +50,76 @@ class rq:
         else:
             self.current = current
 
-
     def sort(self):
         pass
 
 
 class fcfs(rq):
-    name = 'fcfs'
+    name = 'FCFS'
+
     def sort(self):
         # self.process = sorted(self.process, key=lambda pc: pc.arrive_time)
         pass
 
+
 class sjf(rq):
-    name = 'sjf'
+    name = 'SJF'
+
     def sort(self):
         self.process = sorted(self.process, key=lambda pc: pc.rest)
         pass
 
-class rr(rq):
-    name = 'rr'
-    def sort(self):
 
-        pass
+class rr(rq):
+    name = 'RR'
+    isinquantum = False
+
+    def status(self):
+        if len(self.process) or not (self.current is None) or not self.isinquantum:
+            return True
+        return False
+
+    def do(self, clock):
+        if self.current is None:
+            current = self.process.pop(0)
+        else:
+            current = self.current
+
+        current.do(clock)
+
+        if current.is_ended:
+            self.ended.append(current)
+            self.current = None
+            self.isinquantum = False
+        else:
+            if self.isinquantum:
+                self.process.append(current)
+                self.current = None
+                self.isinquantum = False
+            elif not self.isinquantum:
+                self.isinquantum = True
+                self.current = current
+
+    def _2qdo(self, clock):
+        if self.isinquantum:
+            if self.current is None:
+                self.isinquantum = not self.isinquantum
+                return None
+            else:
+                current = self.current
+        else:
+            if self.current is None:
+                current = self.process.pop(0)
+            else:
+                current = self.current
+
+        current.do(clock)
+
+        if current.is_ended:
+            self.ended.append(current)
+            self.current = None
+            self.isinquantum = not self.isinquantum
+        else:
+            self.current = current
+            self.isinquantum = not self.isinquantum
+        return None

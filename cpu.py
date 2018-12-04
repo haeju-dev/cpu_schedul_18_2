@@ -4,7 +4,7 @@ from input import getinput
 input_processes = getinput('process.in')
 
 rq = list()
-rq.append(rr())
+rq.append(rr(quantumsize=2))
 rq.append(sjf())
 rq.append(fcfs())
 
@@ -38,6 +38,6 @@ result = list()
 for i in rq:
     for j in i.ended:
         result.append(j)
-result = sorted(result, key=lambda pid:pid.pid)
+result = sorted(result, key=lambda pid: pid.pid)
 
 print(result)
